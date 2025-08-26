@@ -72,7 +72,11 @@ export const generateBookingPDF = (formData, seatData) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Image src="/logo.png" style={styles.logo} />
+          {seatData?.logo_url ? (
+            <Image src={seatData.logo_url} style={styles.logo} />
+          ) : (
+            <Image src="/logo.png" style={styles.logo} />
+          )}
           <Text style={styles.sectionTitle}>Generated: {currentDate}</Text>
         </View>
 
@@ -125,8 +129,16 @@ export const generateBookingPDF = (formData, seatData) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Practice Information</Text>
           <View style={styles.field}>
-            <Text style={styles.label}>Doctor:</Text>
-            <Text style={styles.value}>{seatData?.doctor_name || 'N/A'}</Text>
+            <Text style={styles.label}>Consultant:</Text>
+            <Text style={styles.value}>{seatData?.consultant_name || 'N/A'}</Text>
+          </View>
+          <View style={styles.field}>
+            <Text style={styles.label}>Specialty:</Text>
+            <Text style={styles.value}>{seatData?.specialty || 'N/A'}</Text>
+          </View>
+          <View style={styles.field}>
+            <Text style={styles.label}>Hospitals:</Text>
+            <Text style={styles.value}>{seatData?.hospitals || 'N/A'}</Text>
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Seat ID:</Text>

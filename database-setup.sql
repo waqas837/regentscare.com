@@ -1,29 +1,37 @@
 -- Regents Care Database Setup
 -- Run these SQL commands in your Supabase SQL editor
 
--- Create seats table
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS referrals CASCADE;
+DROP TABLE IF EXISTS seats CASCADE;
+
+-- Create seats table with correct schema
 CREATE TABLE IF NOT EXISTS seats (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     seat_id VARCHAR(255) UNIQUE NOT NULL,
-    doctor_name VARCHAR(255) NOT NULL,
-    practice_email VARCHAR(255) NOT NULL,
+    consultant_name VARCHAR(255) NOT NULL,
+    booking_email VARCHAR(255) NOT NULL,
+    specialty VARCHAR(255),
+    hospitals TEXT,
+    logo_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create referrals table
+-- Create referrals table with correct schema
 CREATE TABLE IF NOT EXISTS referrals (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     seat_id VARCHAR(255) NOT NULL,
     patient_name VARCHAR(255) NOT NULL,
-    dob DATE NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(50) NOT NULL,
+    patient_email VARCHAR(255) NOT NULL,
+    patient_phone VARCHAR(50),
+    patient_dob VARCHAR(50),
     insurer VARCHAR(255),
     policy VARCHAR(255),
     urgency VARCHAR(50) DEFAULT 'routine',
-    summary TEXT NOT NULL,
-    consent BOOLEAN DEFAULT false,
+    summary TEXT,
+    consultant_name VARCHAR(255),
+    booking_email VARCHAR(255),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     FOREIGN KEY (seat_id) REFERENCES seats(seat_id) ON DELETE CASCADE
 );
@@ -57,9 +65,16 @@ CREATE POLICY "Allow public insert to referrals" ON referrals
 CREATE POLICY "Allow authenticated read access to referrals" ON referrals
     FOR SELECT USING (true);
 
--- Insert demo seat for testing
-INSERT INTO seats (seat_id, doctor_name, practice_email) 
-VALUES ('demo-doctor', 'Dr. Jane Smith', 'demo@regentscare.com')
+-- Insert demo seat for testing (matching client requirements)
+INSERT INTO seats (seat_id, consultant_name, booking_email, specialty, hospitals, logo_url) 
+VALUES (
+    'demo-doctor', 
+    'Demo Doctor', 
+    'info@regentscare.com', 
+    'General', 
+    'Demo Hospital', 
+    ''
+)
 ON CONFLICT (seat_id) DO NOTHING;
 
 -- Create function to update updated_at timestamp
