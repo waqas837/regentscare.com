@@ -19,6 +19,19 @@ const styles = StyleSheet.create({
     width: 120,
     height: 40,
   },
+  logoPlaceholder: {
+    width: 120,
+    height: 40,
+    backgroundColor: '#4F46E5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+  },
+  logoText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -68,15 +81,14 @@ export const generateBookingPDF = (formData, seatData) => {
     minute: '2-digit',
   })
 
+  // Always use Regents Care logo from the website
+  const logoPath = 'https://regentscare-com.vercel.app/logo.png'
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          {seatData?.logo_url ? (
-            <Image src={seatData.logo_url} style={styles.logo} />
-          ) : (
-            <Image src="/logo.png" style={styles.logo} />
-          )}
+          <Image src={logoPath} style={styles.logo} />
           <Text style={styles.sectionTitle}>Generated: {currentDate}</Text>
         </View>
 

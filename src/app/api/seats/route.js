@@ -4,29 +4,20 @@ import { supabase } from '@/lib/supabase'
 // GET - List all seats
 export async function GET() {
   try {
-    console.log('🔍 Fetching seats from Supabase...')
-    console.log('📡 Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log('🔑 Supabase Key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-    
     const { data, error } = await supabase
       .from('seats')
       .select('*')
       .order('created_at', { ascending: false })
 
-    console.log('📊 Supabase response:', { data, error })
-
     if (error) {
-      console.error('❌ Supabase error:', error)
       return NextResponse.json(
         { error: 'Failed to fetch seats', details: error.message },
         { status: 500 }
       )
     }
 
-    console.log('✅ Successfully fetched seats:', data)
     return NextResponse.json({ seats: data })
   } catch (error) {
-    console.error('💥 Unexpected error:', error)
     return NextResponse.json(
       { error: 'Internal server error', details: error.message },
       { status: 500 }

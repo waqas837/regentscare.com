@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Calendar, Mail, Phone, User, Shield, AlertTriangle, FileText, CheckCircle } from 'lucide-react'
+import Toast from './Toast'
 
 const BookingForm = ({ seatId, seatData }) => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const BookingForm = ({ seatId, seatData }) => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' })
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -44,7 +46,11 @@ const BookingForm = ({ seatId, seatData }) => {
       })
 
       if (response.ok) {
-        setSubmitStatus('success')
+        setToast({
+          show: true,
+          message: 'Appointment request sent successfully! Check your email for confirmation.',
+          type: 'success'
+        })
         setFormData({
           name: '',
           dob: '',
@@ -57,10 +63,18 @@ const BookingForm = ({ seatId, seatData }) => {
           consent: false
         })
       } else {
-        setSubmitStatus('error')
+        setToast({
+          show: true,
+          message: 'Something went wrong. Please try again.',
+          type: 'error'
+        })
       }
     } catch (error) {
-      setSubmitStatus('error')
+      setToast({
+        show: true,
+        message: 'Something went wrong. Please try again.',
+        type: 'error'
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -83,20 +97,13 @@ const BookingForm = ({ seatId, seatData }) => {
             )}
           </div>
 
-          {/* Success/Error Messages */}
-          {submitStatus === 'success' && (
-            <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
-              <span>Appointment request sent successfully! Check your email for confirmation.</span>
-            </div>
-          )}
-
-          {submitStatus === 'error' && (
-            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-              <span>Something went wrong. Please try again.</span>
-            </div>
-          )}
+          {/* Toast Notification */}
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            isVisible={toast.show}
+            onClose={() => setToast({ ...toast, show: false })}
+          />
 
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Personal Information */}

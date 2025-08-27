@@ -17,6 +17,8 @@ export default function SeatsPage() {
     logo_url: ''
   })
   const [copiedId, setCopiedId] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [deleting, setDeleting] = useState(null)
 
   useEffect(() => {
     fetchSeats()
@@ -38,6 +40,7 @@ export default function SeatsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setSubmitting(true)
     
     try {
       const url = editingSeat ? '/api/seats' : '/api/seats'
@@ -60,6 +63,8 @@ export default function SeatsPage() {
       }
     } catch (error) {
       console.error('Error saving seat:', error)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -79,6 +84,7 @@ export default function SeatsPage() {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this seat?')) return
 
+    setDeleting(id)
     try {
       const response = await fetch(`/api/seats?id=${id}`, {
         method: 'DELETE',
@@ -89,6 +95,8 @@ export default function SeatsPage() {
       }
     } catch (error) {
       console.error('Error deleting seat:', error)
+    } finally {
+      setDeleting(null)
     }
   }
 
@@ -241,14 +249,23 @@ export default function SeatsPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto"
+                  disabled={submitting}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-2"
                 >
-                  {editingSeat ? 'Update Seat' : 'Add Seat'}
+                  {submitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      {editingSeat ? 'Updating...' : 'Adding...'}
+                    </>
+                  ) : (
+                    editingSeat ? 'Update Seat' : 'Add Seat'
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl transition-all duration-300 w-full sm:w-auto"
+                  disabled={submitting}
+                  className="bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-6 py-3 rounded-xl transition-all duration-300 w-full sm:w-auto"
                 >
                   Cancel
                 </button>
@@ -265,6 +282,7 @@ export default function SeatsPage() {
               <thead className="bg-gradient-to-r from-indigo-50 to-purple-50">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Seat ID</th>
+                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Logo</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Consultant Name</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Booking Email</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Specialty</th>
@@ -278,6 +296,23 @@ export default function SeatsPage() {
                 {seats.map((seat) => (
                   <tr key={seat.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 text-gray-900 font-mono font-medium">{seat.seat_id}</td>
+                    <td className="px-6 py-4">
+                      {seat.logo_url ? (
+                        <img 
+                          src={seat.logo_url} 
+                          alt="Logo" 
+                          className="h-8 w-8 object-contain rounded"
+                          onError={(e) => {
+                            e.target.style.display = 'none'
+                            e.target.nextSibling.style.display = 'block'
+                          }}
+                        />
+                      ) : (
+                        <div className="h-8 w-8 bg-indigo-100 rounded flex items-center justify-center">
+                          <span className="text-xs text-indigo-600 font-medium">RC</span>
+                        </div>
+                      )}
+                    </td>
                     <td className="px-6 py-4 text-gray-900 font-medium">{seat.consultant_name}</td>
                     <td className="px-6 py-4 text-gray-600">{seat.booking_email}</td>
                     <td className="px-6 py-4 text-gray-600">{seat.specialty || '-'}</td>
@@ -312,9 +347,14 @@ export default function SeatsPage() {
                         </button>
                         <button
                           onClick={() => handleDelete(seat.id)}
-                          className="text-red-600 hover:text-red-700 transition-colors"
+                          disabled={deleting === seat.id}
+                          className="text-red-600 hover:text-red-700 disabled:text-gray-400 transition-colors"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          {deleting === seat.id ? (
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
                         </button>
                       </div>
                     </td>
@@ -329,9 +369,26 @@ export default function SeatsPage() {
             {seats.map((seat) => (
               <div key={seat.id} className="p-4 border-b border-gray-100 last:border-b-0">
                 <div className="flex justify-between items-start mb-3">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 text-lg">{seat.consultant_name}</h3>
-                    <p className="text-gray-600 text-sm font-mono">{seat.seat_id}</p>
+                  <div className="flex items-center gap-3 flex-1">
+                    {seat.logo_url ? (
+                      <img 
+                        src={seat.logo_url} 
+                        alt="Logo" 
+                        className="h-8 w-8 object-contain rounded"
+                        onError={(e) => {
+                          e.target.style.display = 'none'
+                          e.target.nextSibling.style.display = 'block'
+                        }}
+                      />
+                    ) : (
+                      <div className="h-8 w-8 bg-indigo-100 rounded flex items-center justify-center">
+                        <span className="text-xs text-indigo-600 font-medium">RC</span>
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-semibold text-gray-900 text-lg">{seat.consultant_name}</h3>
+                      <p className="text-gray-600 text-sm font-mono">{seat.seat_id}</p>
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -342,9 +399,14 @@ export default function SeatsPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(seat.id)}
-                      className="text-red-600 hover:text-red-700 transition-colors p-2"
+                      disabled={deleting === seat.id}
+                      className="text-red-600 hover:text-red-700 disabled:text-gray-400 transition-colors p-2"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      {deleting === seat.id ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
                     </button>
                   </div>
                 </div>

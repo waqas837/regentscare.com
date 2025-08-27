@@ -89,7 +89,6 @@ export async function POST(request) {
     
     const pdfDoc = generateBookingPDF(formData, seatData)
     const pdfBuffer = await renderToBuffer(pdfDoc)
-    console.log('PDF generated successfully, size:', pdfBuffer.length, 'bytes')
 
     // Prepare email content
     const condition = summary ? summary.substring(0, 50) + (summary.length > 50 ? '...' : '') : 'General'
@@ -150,7 +149,7 @@ Regents Care Team
       throw new Error('Invalid email provider configured')
     }
 
-    console.log('Email sent successfully:', emailResult)
+
 
     return NextResponse.json({
       success: true,

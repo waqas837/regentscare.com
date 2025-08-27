@@ -1,14 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-console.log('🔧 Supabase Client Setup:')
-console.log('📡 URL:', supabaseUrl)
-console.log('🔑 Key exists:', !!supabaseAnonKey)
-console.log('🔑 Key length:', supabaseAnonKey?.length)
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+})
 
 // Test function to check connectivity
 export async function testSupabaseConnection() {
