@@ -20,28 +20,25 @@ export default function Home() {
             </div>
             <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-6" />
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Streamline Your
-              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"> Healthcare</span>
-              <br />
-              <span className="text-gray-800">Appointment Booking</span>
+              Turn Google/Maps clicks into
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"> booking-ready emails</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Transform clicks from Google, Maps, or social media into booking-ready emails. 
-              No portals, no complexity - just seamless appointment requests that work.
+              £149/month per consultant · Free 14-day pilot · No per-lead fees · No new portal
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link 
-                href="/c/demo-doctor" 
+              <a 
+                href="mailto:info@regentscare.com" 
                 className="group bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
               >
-                Try Demo Booking
+                Start free pilot
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </a>
               <Link 
-                href="/seats" 
+                href="/c/demo" 
                 className="bg-white hover:bg-gray-50 text-gray-700 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-200 transform hover:-translate-y-1"
               >
-                Manage Seats
+                See live demo
               </Link>
             </div>
             <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
@@ -59,6 +56,15 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Book Install Contact */}
+      <section className="py-8 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-lg text-gray-700">
+            <strong>Book a 5-min install:</strong> <a href="mailto:info@regentscare.com" className="text-indigo-600 hover:text-indigo-700 font-medium">info@regentscare.com</a>
+          </p>
         </div>
       </section>
 

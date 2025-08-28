@@ -137,6 +137,11 @@ export default function SeatsPage() {
               <p>• Captures insurer, policy & urgency → book on first reply</p>
               <p>• Keep TopDoctors; this is an additional Appointment link</p>
             </div>
+            <div className="mt-4 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
+              <p className="text-sm text-indigo-700">
+                <strong>Book a 5-min install:</strong> <a href="mailto:info@regentscare.com" className="text-indigo-600 hover:text-indigo-700 font-medium">info@regentscare.com</a>
+              </p>
+            </div>
           </div>
           <button
             onClick={() => setShowForm(true)}

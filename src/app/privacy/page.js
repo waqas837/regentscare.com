@@ -45,7 +45,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
                 <li>The healthcare provider you are booking with</li>
-                <li>Our email service provider (Resend) for sending communications</li>
+                <li>Our email service provider (Postmark) for sending communications</li>
                 <li>Our database provider (Supabase) for secure data storage</li>
                 <li>Authorized personnel within Regents Care for service provision</li>
               </ul>
@@ -68,7 +68,14 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Your Rights</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. GDPR Compliance</h2>
+              <p className="text-gray-700 leading-relaxed">
+                GDPR-compliant. Email delivered via Postmark (DKIM/SPF/DMARC configured). Data sent securely; removal on request.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Your Rights</h2>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 You have the right to:
               </p>
@@ -82,7 +89,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Data Retention</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Data Retention</h2>
               <p className="text-gray-700 leading-relaxed">
                 We retain your personal information for as long as necessary to provide our services and comply with legal obligations. 
                 Appointment booking data is typically retained for 7 years to comply with healthcare record requirements.
@@ -90,7 +97,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Cookies and Tracking</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Cookies and Tracking</h2>
               <p className="text-gray-700 leading-relaxed">
                 We use essential cookies to ensure the proper functioning of our website. We do not use tracking cookies or analytics 
                 that collect personal information without your explicit consent.
@@ -98,7 +105,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Contact Us</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Contact Us</h2>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
@@ -112,7 +119,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Changes to This Policy</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Changes to This Policy</h2>
               <p className="text-gray-700 leading-relaxed">
                 We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy 
                 on this page and updating the "Last updated" date. We encourage you to review this Privacy Policy periodically.

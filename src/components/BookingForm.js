@@ -48,7 +48,7 @@ const BookingForm = ({ seatId, seatData }) => {
       if (response.ok) {
         setToast({
           show: true,
-          message: 'Appointment request sent successfully! Check your email for confirmation.',
+          message: seatId === 'demo' ? 'Thanks — we\'ll contact you within 2 hours. A confirmation has been emailed (you\'re CC\'d).' : 'Appointment request sent successfully! Check your email for confirmation.',
           type: 'success'
         })
         setFormData({
@@ -92,7 +92,7 @@ const BookingForm = ({ seatId, seatData }) => {
             </h1>
             {seatData && (
               <p className="text-gray-600">
-                Dr. {seatData.doctor_name}
+                {seatData.consultant_name} ({seatData.specialty} · {seatData.hospitals})
               </p>
             )}
           </div>
