@@ -169,3 +169,51 @@ NEXT STEPS:
 2. Test the /c/demo page to ensure it shows "Prof Demo Consultant (ENT · The London Clinic)"
 3. Test the success message shows the exact text requested
 4. Verify all "Book a 5-min install" contacts are visible
+
+NEW CLIENT REQUIREMENTS - JANUARY 2025:
+=====================================
+
+1. ✅ Demo Page Updates
+   - Header above form: "Request appointment — Prof Demo Consultant (ENT · The London Clinic)"
+   - Success message after submit: "Thanks — we'll contact you within 2 hours. A confirmation has been emailed (you're CC'd)."
+   - Status: COMPLETED
+
+2. ✅ Simple Admin to Add a Seat
+   - Add passworded page: /admin/seats (env: ADMIN_PASSWORD)
+   - Fields: Consultant Name (auto-slug), Booking email, Specialty, Hospitals
+   - Buttons: [Save] → writes to DB and makes /c/<slug> live; [Save & Test] → also sends a test referral (PDF attached) to the booking email and CCs info@regentscare.com
+   - List existing seats with Edit/Disable
+   - Status: COMPLETED
+
+3. ✅ Patient Form — Insurer with Self-pay
+   - Add "Self-pay" option to insurer dropdown
+   - When Self-pay selected, hide policy field
+   - Self-pay should appear in subject/PDF
+   - Status: COMPLETED
+
+4. ✅ Payments (Minimum Viable)
+   - Create Stripe Product "RegentsCare Seat" @ £149/month
+   - Generate Stripe Checkout Link
+   - Add button "Start paid plan (£149/m)" on /seats (or /admin/seats)
+   - Add /billing/success and /billing/cancel simple pages
+   - Status: COMPLETED
+
+5. ✅ Small Cleanups
+   - /seats page: show "Book a 5-min install: info@regentscare.com" (or redirect to mailto)
+   - Privacy copy: "GDPR-compliant. Email via Postmark (DKIM/SPF/DMARC). Data sent securely; removal on request."
+   - Always BCC info@regentscare.com on referral emails
+   - Status: COMPLETED
+
+ENVIRONMENT VARIABLES NEEDED:
+- ADMIN_PASSWORD (for /admin/seats access)
+- POSTMARK_SERVER_TOKEN (already exists)
+- STRIPE_PUBLIC_KEY
+- STRIPE_SECRET_KEY
+
+ACCEPTANCE CRITERIA:
+- I can add a consultant on /admin/seats and get a live /c/<slug>
+- "Save & Test" sends a referral email with PDF to the booking inbox (and BCCs info@)
+- Insurer dropdown works; Self-pay hides policy and appears in subject/PDF
+- Stripe Checkout opens from the button and returns to /billing/success
+
+CURRENT STATUS: 100% of new requirements completed

@@ -106,7 +106,7 @@ Patient Details:
 - Email: ${email}
 - Phone: ${phone || 'Not provided'}
 - Insurer: ${insurer || 'Not provided'}
-- Policy: ${policy || 'Not provided'}
+${insurer !== 'Self-pay' ? `- Policy: ${policy || 'Not provided'}` : ''}
 - Urgency: ${urgency || 'Not specified'}
 - Summary: ${summary || 'Not provided'}
 

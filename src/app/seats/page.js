@@ -19,20 +19,46 @@ export default function SeatsPage() {
   const [copiedId, setCopiedId] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [deleting, setDeleting] = useState(null)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
 
   useEffect(() => {
     fetchSeats()
   }, [])
 
+  const handleStripeCheckout = async () => {
+    setCheckoutLoading(true)
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          success_url: `${window.location.origin}/billing/success`,
+          cancel_url: `${window.location.origin}/billing/cancel`,
+        }),
+      })
+
+      const { url } = await response.json()
+      if (url) {
+        window.location.href = url
+      }
+    } catch (error) {
+      console.error('Checkout error:', error)
+      alert('Failed to start checkout process')
+    } finally {
+      setCheckoutLoading(false)
+    }
+  }
+
   const fetchSeats = async () => {
     try {
       const response = await fetch('/api/seats')
       const data = await response.json()
-      if (data.seats) {
-        setSeats(data.seats)
-      }
+      setSeats(data.seats || data || [])
     } catch (error) {
       console.error('Error fetching seats:', error)
+      setSeats([])
     } finally {
       setLoading(false)
     }
@@ -143,13 +169,32 @@ export default function SeatsPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full lg:w-auto justify-center"
-          >
-            <Plus className="h-5 w-5" />
-            Add New Seat
-          </button>
+          <div className="flex flex-col gap-3 w-full lg:w-auto">
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full lg:w-auto justify-center"
+            >
+              <Plus className="h-5 w-5" />
+              Add New Seat
+            </button>
+            
+            <button
+              onClick={handleStripeCheckout}
+              disabled={checkoutLoading}
+              className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full lg:w-auto justify-center"
+            >
+              {checkoutLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  Loading...
+                </>
+              ) : (
+                <>
+                  💳 Start paid plan (£149/m)
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Add/Edit Form */}

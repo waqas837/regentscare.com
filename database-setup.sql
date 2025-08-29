@@ -1,6 +1,6 @@
+-- database-setup.sql - Creates database + original demo-doctor seat
 -- Regents Care Database Setup
 -- Run these SQL commands in your Supabase SQL editor
-
 -- Drop existing tables if they exist
 DROP TABLE IF EXISTS referrals CASCADE;
 DROP TABLE IF EXISTS seats CASCADE;

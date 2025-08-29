@@ -88,9 +88,9 @@ const BookingForm = ({ seatId, seatData }) => {
           <div className="text-center mb-8">
             <img src="/logo.png" alt="Regents Care" className="h-12 mx-auto mb-4" />
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Request Appointment
+              {seatId === 'demo' ? 'Request appointment — Prof Demo Consultant (ENT · The London Clinic)' : 'Request Appointment'}
             </h1>
-            {seatData && (
+            {seatData && seatId !== 'demo' && (
               <p className="text-gray-600">
                 {seatData.consultant_name} ({seatData.specialty} · {seatData.hospitals})
               </p>
@@ -193,29 +193,39 @@ const BookingForm = ({ seatId, seatData }) => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Insurance Provider
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="insurer"
                     value={formData.insurer}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                    placeholder="e.g., Blue Cross, Aetna"
-                  />
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Select insurance provider</option>
+                    <option value="Self-pay">Self-pay</option>
+                    <option value="Blue Cross">Blue Cross</option>
+                    <option value="Aetna">Aetna</option>
+                    <option value="Cigna">Cigna</option>
+                    <option value="UnitedHealth">UnitedHealth</option>
+                    <option value="Humana">Humana</option>
+                    <option value="Kaiser Permanente">Kaiser Permanente</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Policy Number
-                  </label>
-                  <input
-                    type="text"
-                    name="policy"
-                    value={formData.policy}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                    placeholder="Policy number"
-                  />
-                </div>
+                {formData.insurer !== 'Self-pay' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Policy Number
+                    </label>
+                    <input
+                      type="text"
+                      name="policy"
+                      value={formData.policy}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                      placeholder="Policy number"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 

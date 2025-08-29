@@ -1,5 +1,6 @@
 -- Add demo seat for client requirements
 -- Run this in your Supabase SQL editor
+-- add-demo-seat.sql - Adds new demo seat for client's specific requirements
 
 INSERT INTO seats (seat_id, consultant_name, booking_email, specialty, hospitals, logo_url) 
 VALUES (

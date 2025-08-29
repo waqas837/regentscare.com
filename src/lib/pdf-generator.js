@@ -120,10 +120,12 @@ export const generateBookingPDF = (formData, seatData) => {
             <Text style={styles.label}>Insurer:</Text>
             <Text style={styles.value}>{formData.insurer}</Text>
           </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Policy:</Text>
-            <Text style={styles.value}>{formData.policy}</Text>
-          </View>
+          {formData.insurer !== 'Self-pay' && (
+            <View style={styles.field}>
+              <Text style={styles.label}>Policy:</Text>
+              <Text style={styles.value}>{formData.policy}</Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.section}>
