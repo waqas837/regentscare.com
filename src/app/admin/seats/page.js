@@ -172,7 +172,7 @@ export default function AdminSeatsPage() {
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
           <div className="text-center mb-8">
-            <img src="/logo.png" alt="Regents Care" className="h-12 mx-auto mb-4" />
+            <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
             <p className="text-gray-600 mt-2">Enter password to manage seats</p>
           </div>

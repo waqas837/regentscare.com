@@ -18,7 +18,7 @@ export default function Home() {
               <Star className="h-4 w-4 text-yellow-500 fill-current" />
               <span className="text-sm font-medium text-gray-700">Trusted by Healthcare Providers</span>
             </div>
-            <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-6" />
+            <img src="/logo.png" alt="Regents Care" className="h-20 mx-auto mb-6" />
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
               Turn Google/Maps clicks into
               <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"> booking-ready emails</span>
@@ -178,7 +178,7 @@ export default function Home() {
                     <CheckCircle className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">HIPAA-compliant data handling</h4>
+                    <h4 className="font-semibold text-gray-900">GDPR-compliant data handling</h4>
                     <p className="text-gray-600 text-sm">Security you can trust</p>
                   </div>
                 </div>
@@ -294,7 +294,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
-              <img src="/logo.png" alt="Regents Care" className="h-8 brightness-0 invert" />
+              <img src="/logo.png" alt="Regents Care" className="h-10 brightness-0 invert" />
               <span className="text-gray-400">© 2024 Regents Care. All rights reserved.</span>
             </div>
             <div className="flex gap-6">

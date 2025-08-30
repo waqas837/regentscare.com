@@ -86,7 +86,7 @@ const BookingForm = ({ seatId, seatData }) => {
         <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
           {/* Header */}
           <div className="text-center mb-8">
-            <img src="/logo.png" alt="Regents Care" className="h-12 mx-auto mb-4" />
+            <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-4" />
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {seatId === 'demo' ? 'Request appointment — Prof Demo Consultant (ENT · The London Clinic)' : 'Request Appointment'}
             </h1>

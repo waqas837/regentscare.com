@@ -7,7 +7,7 @@ export default function NotFound() {
       <div className="max-w-md mx-auto text-center px-6">
         <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
           <div className="mb-8">
-            <img src="/logo.png" alt="Regents Care" className="h-12 mx-auto mb-6" />
+            <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-6" />
             <h1 className="text-6xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">404</h1>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">Page Not Found</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
