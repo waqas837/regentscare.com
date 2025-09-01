@@ -12,6 +12,7 @@ const BookingForm = ({ seatId, seatData }) => {
     phone: '',
     insurer: '',
     policy: '',
+    selfPay: false,
     urgency: 'routine',
     summary: '',
     consent: false
@@ -58,6 +59,7 @@ const BookingForm = ({ seatId, seatData }) => {
           phone: '',
           insurer: '',
           policy: '',
+          selfPay: false,
           urgency: 'routine',
           summary: '',
           consent: false
@@ -188,30 +190,51 @@ const BookingForm = ({ seatId, seatData }) => {
                 Insurance Information
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Insurance Provider
-                  </label>
-                  <select
-                    name="insurer"
-                    value={formData.insurer}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  >
-                    <option value="">Select insurance provider</option>
-                    <option value="Self-pay">Self-pay</option>
-                    <option value="Blue Cross">Blue Cross</option>
-                    <option value="Aetna">Aetna</option>
-                    <option value="Cigna">Cigna</option>
-                    <option value="UnitedHealth">UnitedHealth</option>
-                    <option value="Humana">Humana</option>
-                    <option value="Kaiser Permanente">Kaiser Permanente</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
+              {/* Self Pay Option */}
+              <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl border border-green-200">
+                <input
+                  type="checkbox"
+                  name="selfPay"
+                  checked={formData.selfPay}
+                  onChange={(e) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      selfPay: e.target.checked,
+                      insurer: e.target.checked ? 'Self-pay' : '',
+                      policy: e.target.checked ? '' : prev.policy
+                    }))
+                  }}
+                  className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                />
+                <label className="text-sm text-gray-700">
+                  <span className="font-semibold text-green-700">Self Pay</span> - I will be paying for this appointment myself
+                </label>
+              </div>
 
-                {formData.insurer !== 'Self-pay' && (
+              {/* Insurance Provider Fields - Only show if not self-pay */}
+              {!formData.selfPay && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Insurance Provider
+                    </label>
+                    <select
+                      name="insurer"
+                      value={formData.insurer}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                    >
+                      <option value="">Select insurance provider</option>
+                      <option value="Blue Cross">Blue Cross</option>
+                      <option value="Aetna">Aetna</option>
+                      <option value="Cigna">Cigna</option>
+                      <option value="UnitedHealth">UnitedHealth</option>
+                      <option value="Humana">Humana</option>
+                      <option value="Kaiser Permanente">Kaiser Permanente</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Policy Number
@@ -225,8 +248,8 @@ const BookingForm = ({ seatId, seatData }) => {
                       placeholder="Policy number"
                     />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             {/* Appointment Details */}
