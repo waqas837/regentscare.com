@@ -123,14 +123,17 @@ Please review and respond to the patient directly.
 
 Best regards,
 Regents Care Team
+
+---
+If you'd rather not hear about this, reply stop and I'll remove you.
     `.trim()
 
     // Send email based on provider
     let emailResult
     if (EMAIL_PROVIDER === 'postmark') {
-      // Send via Postmark
+      // Send via Postmark Broadcast (instead of regular sendEmail)
       emailResult = await postmarkClient.sendEmail({
-        From: process.env.FROM_EMAIL,
+        From: 'info@regentscare.com', // Changed from referrals@regentscare.com
         To: seatData.booking_email,
         Cc: email, // Patient CC'd
         Bcc: process.env.AUDIT_BCC, // Audit BCC
@@ -143,7 +146,13 @@ Regents Care Team
             ContentType: 'application/pdf'
           }
         ],
-        MessageStream: process.env.MESSAGE_STREAM || 'outbound'
+        MessageStream: 'broadcast', // Changed to broadcast stream
+        Headers: [
+          {
+            Name: 'List-Unsubscribe',
+            Value: '<mailto:info@regentscare.com?subject=unsubscribe>'
+          }
+        ]
       })
     } else {
       throw new Error('Invalid email provider configured')

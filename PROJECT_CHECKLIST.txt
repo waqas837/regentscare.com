@@ -217,3 +217,44 @@ ACCEPTANCE CRITERIA:
 - Stripe Checkout opens from the button and returns to /billing/success
 
 CURRENT STATUS: 100% of new requirements completed
+
+NEW CLIENT EMAIL REQUIREMENTS - JANUARY 2025:
+=====================================
+
+1. Switch to Postmark Broadcast
+   - Change from regular Postmark sends to Broadcast
+   - Keep tracking OFF (no open/link tracking)
+   - Ensure every send appears in Activity tab
+   - Status: ✅ COMPLETED
+
+2. Update Sender Address
+   - Change FROM: referrals@regentscare.com → info@regentscare.com
+   - Update Postmark configuration
+   - Status: ✅ COMPLETED
+
+3. Add List-Unsubscribe Header
+   - Add hidden header: List-Unsubscribe: <mailto:info@regentscare.com?subject=unsubscribe>
+   - Apply to all Broadcast sends
+   - Status: ✅ COMPLETED
+
+4. Add Unsubscribe Footer
+   - Add visible footer: "If you'd rather not hear about this, reply stop and I'll remove you."
+   - Include in email body
+   - Status: ✅ COMPLETED
+
+5. Keep Outlook for Replies
+   - Maintain current reply handling
+   - Only change outgoing patient emails
+   - Status: ✅ COMPLETED
+
+PURPOSE: Improve email deliverability and comply with anti-spam regulations.
+
+ACCEPTANCE CRITERIA:
+- Patient emails sent via Postmark Broadcast (not regular sends)
+- List-Unsubscribe header present in all emails
+- Tracking OFF (no open/link tracking)
+- FROM address shows info@regentscare.com
+- Unsubscribe footer visible in email body
+- All sends appear in Postmark Activity tab
+
+CURRENT STATUS: 100% of email changes completed
