@@ -225,12 +225,12 @@ const BookingForm = ({ seatId, seatData }) => {
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                     >
                       <option value="">Select insurance provider</option>
-                      <option value="Blue Cross">Blue Cross</option>
-                      <option value="Aetna">Aetna</option>
-                      <option value="Cigna">Cigna</option>
-                      <option value="UnitedHealth">UnitedHealth</option>
-                      <option value="Humana">Humana</option>
-                      <option value="Kaiser Permanente">Kaiser Permanente</option>
+                      <option value="Bupa">Bupa</option>
+                      <option value="AXA Health">AXA Health</option>
+                      <option value="Aviva Health">Aviva Health</option>
+                      <option value="Vitality">Vitality</option>
+                      <option value="WPA">WPA</option>
+                      <option value="Bupa Global">Bupa Global</option>
                       <option value="Other">Other</option>
                     </select>
                   </div>
