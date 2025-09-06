@@ -82,7 +82,7 @@ export const generateBookingPDF = (formData, seatData) => {
   })
 
   // Always use Regents Care logo from the website
-  const logoPath = 'https://regentscare-com.vercel.app/logo.png'
+  const logoPath = 'https://regentscare.com/logo.png'
 
   return (
     <Document>

@@ -258,3 +258,20 @@ ACCEPTANCE CRITERIA:
 - All sends appear in Postmark Activity tab
 
 CURRENT STATUS: 100% of email changes completed
+
+
+
+// SEPARETE FROM CHECKLIST
+// Right or correct sample(It will send to the right broadcast)
+curl -X POST https://api.postmarkapp.com/email \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "X-Postmark-Server-Token: 95cb5b7d-7d9a-4232-9e83-7e0098d4a527" \
+  -H "X-PM-Message-Stream: broadcast" \
+  -d '{
+    "From": "RegentsCare <info@regentscare.com>",
+    "To": "waqaskhanbughlani1124@gmail.com",
+    "Subject": "Test Broadcast Email",
+    "TextBody": "This is a test email via Broadcast stream.",
+    "MessageStream": "broadcast"
+  }'
