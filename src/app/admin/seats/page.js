@@ -1,15 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Eye, EyeOff, Save, Send } from 'lucide-react'
+import { Plus, Edit, Trash2, Save, Send, Eye, Copy, CheckCircle } from 'lucide-react'
+import AdminLayout from '../../../components/AdminLayout'
 
 export default function AdminSeatsPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [password, setPassword] = useState('')
   const [seats, setSeats] = useState([])
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [editingSeat, setEditingSeat] = useState(null)
+  const [copiedId, setCopiedId] = useState(null)
   const [formData, setFormData] = useState({
     consultant_name: '',
     booking_email: '',
@@ -18,29 +18,9 @@ export default function AdminSeatsPage() {
     logo_url: ''
   })
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    
-    try {
-      const response = await fetch('/api/admin/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      })
-      
-      if (response.ok) {
-        setIsAuthenticated(true)
-        fetchSeats()
-      } else {
-        alert('Invalid password')
-      }
-    } catch (error) {
-      alert('Login failed')
-    } finally {
-      setLoading(false)
-    }
-  }
+  useEffect(() => {
+    fetchSeats()
+  }, [])
 
   const fetchSeats = async () => {
     try {
@@ -167,61 +147,25 @@ export default function AdminSeatsPage() {
     })
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
-          <div className="text-center mb-8">
-            <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
-            <p className="text-gray-600 mt-2">Enter password to manage seats</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="Enter admin password"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-            >
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
-          </form>
-        </div>
-      </div>
-    )
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedId(text)
+      setTimeout(() => setCopiedId(null), 2000)
+    } catch (error) {
+      console.error('Failed to copy:', error)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-8">
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Seat Management</h1>
-              <p className="text-gray-600 mt-2">Add and manage consultant booking seats</p>
-            </div>
-            <button
-              onClick={() => setIsAuthenticated(false)}
-              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
+    <AdminLayout currentPage="seats">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Seat Management</h1>
+          <p className="text-gray-600 mt-2">Add and manage consultant booking seats</p>
+        </div>
+      </div>
 
           {/* Add/Edit Form */}
           <div className="bg-gray-50 rounded-2xl p-6 mb-8">
@@ -341,64 +285,98 @@ export default function AdminSeatsPage() {
             </form>
           </div>
 
-          {/* Seats List */}
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Existing Seats</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Consultant</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Specialty</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Hospitals</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Booking Email</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Slug</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {seats.map((seat) => (
-                    <tr key={seat.id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4">{seat.consultant_name}</td>
-                      <td className="py-3 px-4">{seat.specialty}</td>
-                      <td className="py-3 px-4">{seat.hospitals}</td>
-                      <td className="py-3 px-4">{seat.booking_email}</td>
-                      <td className="py-3 px-4">
-                        <a
-                          href={`/c/${seat.seat_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-indigo-600 hover:text-indigo-800 font-medium"
-                        >
-                          /c/{seat.seat_id}
-                        </a>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(seat)}
-                            className="p-2 text-blue-600 hover:text-blue-800 transition-colors"
-                            title="Edit"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(seat.id)}
-                            className="p-2 text-red-600 hover:text-red-800 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+      {/* Seats List */}
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Existing Seats</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Seat ID</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Logo</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Consultant Name</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Booking Email</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Specialty</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Hospitals</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Booking Link</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seats.map((seat) => (
+                <tr key={seat.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="py-3 px-4">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">{seat.seat_id}</span>
+                      <button
+                        onClick={() => copyToClipboard(seat.seat_id)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        title="Copy Seat ID"
+                      >
+                        {copiedId === seat.seat_id ? (
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4">
+                    {seat.logo_url ? (
+                      <img 
+                        src={seat.logo_url} 
+                        alt="Logo" 
+                        className="h-8 w-8 object-contain rounded"
+                        onError={(e) => {
+                          e.target.style.display = 'none'
+                          e.target.nextSibling.style.display = 'block'
+                        }}
+                      />
+                    ) : (
+                      <div className="h-8 w-8 bg-indigo-100 rounded flex items-center justify-center">
+                        <span className="text-xs text-indigo-600 font-medium">RC</span>
+                      </div>
+                    )}
+                  </td>
+                  <td className="py-3 px-4 font-medium">{seat.consultant_name}</td>
+                  <td className="py-3 px-4">{seat.booking_email}</td>
+                  <td className="py-3 px-4">{seat.specialty}</td>
+                  <td className="py-3 px-4">{seat.hospitals}</td>
+                  <td className="py-3 px-4">
+                    <a
+                      href={`/c/${seat.seat_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
+                    >
+                      <Eye className="h-4 w-4" />
+                      View
+                    </a>
+                  </td>
+                  <td className="py-3 px-4">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(seat)}
+                        className="p-2 text-blue-600 hover:text-blue-800 transition-colors"
+                        title="Edit"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(seat.id)}
+                        className="p-2 text-red-600 hover:text-red-800 transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   )
 }

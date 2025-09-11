@@ -1,29 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Copy, CheckCircle, X } from 'lucide-react'
+import { useState } from 'react'
 
 export default function SeatsPage() {
-  const [seats, setSeats] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [showForm, setShowForm] = useState(false)
-  const [editingSeat, setEditingSeat] = useState(null)
-  const [formData, setFormData] = useState({
-    seat_id: '',
-    consultant_name: '',
-    booking_email: '',
-    specialty: '',
-    hospitals: '',
-    logo_url: ''
-  })
-  const [copiedId, setCopiedId] = useState(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [deleting, setDeleting] = useState(null)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
-
-  useEffect(() => {
-    fetchSeats()
-  }, [])
 
   const handleStripeCheckout = async () => {
     setCheckoutLoading(true)
@@ -51,104 +31,6 @@ export default function SeatsPage() {
     }
   }
 
-  const fetchSeats = async () => {
-    try {
-      const response = await fetch('/api/seats')
-      const data = await response.json()
-      setSeats(data.seats || data || [])
-    } catch (error) {
-      console.error('Error fetching seats:', error)
-      setSeats([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setSubmitting(true)
-    
-    try {
-      const url = editingSeat ? '/api/seats' : '/api/seats'
-      const method = editingSeat ? 'PUT' : 'POST'
-      const body = editingSeat ? { ...formData, id: editingSeat.id } : formData
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      })
-
-      if (response.ok) {
-        setShowForm(false)
-        setEditingSeat(null)
-        setFormData({ seat_id: '', consultant_name: '', booking_email: '', specialty: '', hospitals: '', logo_url: '' })
-        fetchSeats()
-      }
-    } catch (error) {
-      console.error('Error saving seat:', error)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const handleEdit = (seat) => {
-    setEditingSeat(seat)
-    setFormData({
-      seat_id: seat.seat_id,
-      consultant_name: seat.consultant_name,
-      booking_email: seat.booking_email,
-      specialty: seat.specialty,
-      hospitals: seat.hospitals,
-      logo_url: seat.logo_url
-    })
-    setShowForm(true)
-  }
-
-  const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this seat?')) return
-
-    setDeleting(id)
-    try {
-      const response = await fetch(`/api/seats?id=${id}`, {
-        method: 'DELETE',
-      })
-
-      if (response.ok) {
-        fetchSeats()
-      }
-    } catch (error) {
-      console.error('Error deleting seat:', error)
-    } finally {
-      setDeleting(null)
-    }
-  }
-
-  const copyToClipboard = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedId(text)
-      setTimeout(() => setCopiedId(null), 2000)
-    } catch (error) {
-      console.error('Failed to copy:', error)
-    }
-  }
-
-  const resetForm = () => {
-    setShowForm(false)
-    setEditingSeat(null)
-    setFormData({ seat_id: '', consultant_name: '', booking_email: '', specialty: '', hospitals: '', logo_url: '' })
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-8">
@@ -200,181 +82,31 @@ export default function SeatsPage() {
         {/* Add/Edit Form - REMOVED FROM PUBLIC PAGE */}
         {/* Admin functions moved to /admin/seats */}
 
-        {/* Seats List - Mobile Responsive */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-          {/* Desktop Table */}
-          <div className="hidden lg:block overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-indigo-50 to-purple-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Seat ID</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Logo</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Consultant Name</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Booking Email</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Specialty</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Hospitals</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Booking Link</th>
-                  {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Created</th> */}
-                  {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Actions</th> */}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {seats.map((seat) => (
-                  <tr key={seat.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-gray-900 font-mono font-medium">{seat.seat_id}</td>
-                    <td className="px-6 py-4">
-                      {seat.logo_url ? (
-                        <img 
-                          src={seat.logo_url} 
-                          alt="Logo" 
-                          className="h-8 w-8 object-contain rounded"
-                          onError={(e) => {
-                            e.target.style.display = 'none'
-                            e.target.nextSibling.style.display = 'block'
-                          }}
-                        />
-                      ) : (
-                        <div className="h-8 w-8 bg-indigo-100 rounded flex items-center justify-center">
-                          <span className="text-xs text-indigo-600 font-medium">RC</span>
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-gray-900 font-medium">{seat.consultant_name}</td>
-                    <td className="px-6 py-4 text-gray-600">{seat.booking_email}</td>
-                    <td className="px-6 py-4 text-gray-600">{seat.specialty || '-'}</td>
-                    <td className="px-6 py-4 text-gray-600">{seat.hospitals || '-'}</td>
-                    <td className="px-6 py-4">
-                      <a
-                        href={`/c/${seat.seat_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block text-center w-full"
-                      >
-                        Book Appointment
-                      </a>
-                    </td>
-                    {/* <td className="px-6 py-4 text-gray-500 text-sm">
-                      {new Date(seat.created_at).toLocaleDateString()}
-                    </td> */}
-                    {/* <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(seat)}
-                          className="text-blue-600 hover:text-blue-700 transition-colors"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(seat.id)}
-                          disabled={deleting === seat.id}
-                          className="text-red-600 hover:text-red-700 disabled:text-gray-400 transition-colors"
-                        >
-                          {deleting === seat.id ? (
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                        </button>
-                      </div>
-                    </td> */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile Cards */}
-          <div className="lg:hidden">
-            {seats.map((seat) => (
-              <div key={seat.id} className="p-4 border-b border-gray-100 last:border-b-0">
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center gap-3 flex-1">
-                    {seat.logo_url ? (
-                      <img 
-                        src={seat.logo_url} 
-                        alt="Logo" 
-                        className="h-8 w-8 object-contain rounded"
-                        onError={(e) => {
-                          e.target.style.display = 'none'
-                          e.target.nextSibling.style.display = 'block'
-                        }}
-                      />
-                    ) : (
-                      <div className="h-8 w-8 bg-indigo-100 rounded flex items-center justify-center">
-                        <span className="text-xs text-indigo-600 font-medium">RC</span>
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="font-semibold text-gray-900 text-lg">{seat.consultant_name}</h3>
-                      <p className="text-gray-600 text-sm font-mono">{seat.seat_id}</p>
-                    </div>
-                  </div>
-                  {/* <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEdit(seat)}
-                      className="text-blue-600 hover:text-blue-700 transition-colors p-2"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(seat.id)}
-                      disabled={deleting === seat.id}
-                      className="text-red-600 hover:text-red-700 disabled:text-gray-400 transition-colors p-2"
-                    >
-                      {deleting === seat.id ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
-                      ) : (
-                        <Trash2 className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div> */}
-                </div>
-                
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Email:</span>
-                    <span className="text-gray-900">{seat.booking_email}</span>
-                  </div>
-                  {seat.specialty && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Specialty:</span>
-                      <span className="text-gray-900">{seat.specialty}</span>
-                    </div>
-                  )}
-                  {seat.hospitals && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Hospitals:</span>
-                      <span className="text-gray-900">{seat.hospitals}</span>
-                    </div>
-                  )}
-                  {/* <div className="flex justify-between">
-                    <span className="text-gray-500">Created:</span>
-                    <span className="text-gray-900">{new Date(seat.created_at).toLocaleDateString()}</span>
-                  </div> */}
-                </div>
-
-                <div className="mt-3 pt-3 border-t border-gray-100">
-                  <a
-                    href={`/c/${seat.seat_id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block text-center"
-                  >
-                    Book Appointment
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {seats.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
-                <Plus className="h-12 w-12 mx-auto opacity-50" />
-              </div>
-              <p className="text-gray-500">No seats found. Add your first seat to get started.</p>
+        {/* Pricing and Contact Info */}
+        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
+            <p className="text-gray-600 mb-6">Contact us to set up your practice booking system</p>
+            
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Pricing</h3>
+              <p className="text-3xl font-bold text-indigo-600 mb-2">£149/month</p>
+              <p className="text-gray-600 text-sm">per consultant • 14-day free trial</p>
             </div>
-          )}
+
+            <div className="space-y-4">
+              <a
+                href="mailto:info@regentscare.com"
+                className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                📧 Book a 5-min install: info@regentscare.com
+              </a>
+              
+              <p className="text-sm text-gray-500">
+                We'll set everything up for you - no technical knowledge required
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
