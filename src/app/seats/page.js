@@ -170,13 +170,13 @@ export default function SeatsPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3 w-full lg:w-auto">
-            <button
+            {/* <button
               onClick={() => setShowForm(true)}
               className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full lg:w-auto justify-center"
             >
               <Plus className="h-5 w-5" />
               Add New Seat
-            </button>
+            </button> */}
             
             <button
               onClick={handleStripeCheckout}
@@ -197,132 +197,8 @@ export default function SeatsPage() {
           </div>
         </div>
 
-        {/* Add/Edit Form */}
-        {showForm && (
-          <div className="bg-white rounded-3xl shadow-2xl p-4 lg:p-8 mb-8 border border-gray-100">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">
-                {editingSeat ? 'Edit Seat' : 'Add New Seat'}
-              </h2>
-              <button
-                onClick={resetForm}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Seat ID *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.seat_id}
-                    onChange={(e) => setFormData({ ...formData, seat_id: e.target.value })}
-                    required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                    placeholder="e.g., demo-doctor"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Consultant Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.consultant_name}
-                    onChange={(e) => setFormData({ ...formData, consultant_name: e.target.value })}
-                    required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                    placeholder="Dr. John Smith"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Booking Email *
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.booking_email}
-                    onChange={(e) => setFormData({ ...formData, booking_email: e.target.value })}
-                    required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                    placeholder="practice@example.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Specialty
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.specialty}
-                    onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                    placeholder="e.g., Cardiology"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Hospitals
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.hospitals}
-                    onChange={(e) => setFormData({ ...formData, hospitals: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                    placeholder="e.g., St. Mary's Hospital"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Logo URL
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.logo_url}
-                    onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                    placeholder="https://example.com/logo.png"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-2"
-                >
-                  {submitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      {editingSeat ? 'Updating...' : 'Adding...'}
-                    </>
-                  ) : (
-                    editingSeat ? 'Update Seat' : 'Add Seat'
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  disabled={submitting}
-                  className="bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-6 py-3 rounded-xl transition-all duration-300 w-full sm:w-auto"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
+        {/* Add/Edit Form - REMOVED FROM PUBLIC PAGE */}
+        {/* Admin functions moved to /admin/seats */}
 
         {/* Seats List - Mobile Responsive */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
@@ -338,8 +214,8 @@ export default function SeatsPage() {
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Specialty</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Hospitals</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Booking Link</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Created</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Actions</th>
+                  {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Created</th> */}
+                  {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Actions</th> */}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -368,26 +244,19 @@ export default function SeatsPage() {
                     <td className="px-6 py-4 text-gray-600">{seat.specialty || '-'}</td>
                     <td className="px-6 py-4 text-gray-600">{seat.hospitals || '-'}</td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <span className="text-indigo-600 font-mono text-sm bg-indigo-50 px-2 py-1 rounded-lg">
-                          /c/{seat.seat_id}
-                        </span>
-                        <button
-                          onClick={() => copyToClipboard(`/c/${seat.seat_id}`)}
-                          className="text-gray-400 hover:text-indigo-600 transition-colors"
-                        >
-                          {copiedId === `/c/${seat.seat_id}` ? (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                          ) : (
-                            <Copy className="h-4 w-4" />
-                          )}
-                        </button>
-                      </div>
+                      <a
+                        href={`/c/${seat.seat_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block text-center w-full"
+                      >
+                        Book Appointment
+                      </a>
                     </td>
-                    <td className="px-6 py-4 text-gray-500 text-sm">
+                    {/* <td className="px-6 py-4 text-gray-500 text-sm">
                       {new Date(seat.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4">
+                    </td> */}
+                    {/* <td className="px-6 py-4">
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleEdit(seat)}
@@ -407,7 +276,7 @@ export default function SeatsPage() {
                           )}
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -440,7 +309,7 @@ export default function SeatsPage() {
                       <p className="text-gray-600 text-sm font-mono">{seat.seat_id}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  {/* <div className="flex gap-2">
                     <button
                       onClick={() => handleEdit(seat)}
                       className="text-blue-600 hover:text-blue-700 transition-colors p-2"
@@ -458,7 +327,7 @@ export default function SeatsPage() {
                         <Trash2 className="h-4 w-4" />
                       )}
                     </button>
-                  </div>
+                  </div> */}
                 </div>
                 
                 <div className="space-y-2 text-sm">
@@ -478,28 +347,21 @@ export default function SeatsPage() {
                       <span className="text-gray-900">{seat.hospitals}</span>
                     </div>
                   )}
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <span className="text-gray-500">Created:</span>
                     <span className="text-gray-900">{new Date(seat.created_at).toLocaleDateString()}</span>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="mt-3 pt-3 border-t border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <span className="text-indigo-600 font-mono text-sm bg-indigo-50 px-2 py-1 rounded-lg">
-                      /c/{seat.seat_id}
-                    </span>
-                    <button
-                      onClick={() => copyToClipboard(`/c/${seat.seat_id}`)}
-                      className="text-gray-400 hover:text-indigo-600 transition-colors p-1"
-                    >
-                      {copiedId === `/c/${seat.seat_id}` ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
+                  <a
+                    href={`/c/${seat.seat_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block text-center"
+                  >
+                    Book Appointment
+                  </a>
                 </div>
               </div>
             ))}

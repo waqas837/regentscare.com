@@ -1,0 +1,37 @@
+---
+description: Regentscare.com project rules for command execution and project management
+globs:
+alwaysApply: true
+---
+
+# Regentscare.com Project Rules
+
+## Command Execution
+- NEVER run terminal commands directly
+- ALWAYS tell the user to run commands instead
+- Provide exact commands for the user to copy/paste
+- Explain what each command does before suggesting it
+
+## Code Changes
+- Use edit tools to modify files directly
+- Read files before making changes
+- Show diffs when making significant changes
+- Ask for confirmation on major refactoring
+
+## File Operations
+- Use file tools to read/write/edit files
+- List directories when exploring project structure
+- Search codebase when looking for specific functionality
+
+## Communication
+- Be concise and direct
+- Focus on the specific task at hand
+- Provide step-by-step guidance when needed
+- Ask clarifying questions if requirements are unclear
+
+## Project Context
+- ONLY work on the regentscare.com project: D:\Freelance projects\blendi77\regentscare.com
+- Do NOT work on BOC form and c250 project
+- Understand the regentscare.com project structure before making changes
+- Maintain consistency with existing regentscare.com code patterns
+- Focus exclusively on regentscare.com functionality
