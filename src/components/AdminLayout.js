@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Users, 
   Settings, 
@@ -18,6 +18,14 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Check localStorage on component mount
+  useEffect(() => {
+    const savedAuth = localStorage.getItem('adminAuth')
+    if (savedAuth === 'true') {
+      setIsAuthenticated(true)
+    }
+  }, [])
+
   const handleLogin = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -31,6 +39,7 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
       
       if (response.ok) {
         setIsAuthenticated(true)
+        localStorage.setItem('adminAuth', 'true')
       } else {
         alert('Invalid username or password')
       }
@@ -45,6 +54,7 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
     setIsAuthenticated(false)
     setUsername('')
     setPassword('')
+    localStorage.removeItem('adminAuth')
   }
 
   const adminTabs = [
@@ -54,34 +64,6 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
       icon: Users,
       href: '/admin/seats',
       description: 'Manage consultant seats'
-    },
-    {
-      id: 'analytics',
-      name: 'Analytics',
-      icon: BarChart3,
-      href: '/admin/analytics',
-      description: 'View booking statistics'
-    },
-    {
-      id: 'emails',
-      name: 'Email Logs',
-      icon: Mail,
-      href: '/admin/emails',
-      description: 'Track sent emails'
-    },
-    {
-      id: 'billing',
-      name: 'Billing',
-      icon: CreditCard,
-      href: '/admin/billing',
-      description: 'Manage subscriptions'
-    },
-    {
-      id: 'settings',
-      name: 'Settings',
-      icon: Settings,
-      href: '/admin/settings',
-      description: 'System configuration'
     }
   ]
 
