@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request) {
   try {
-    const { password } = await request.json()
+    const { username, password } = await request.json()
     
-    // Check if password matches environment variable
-    if (password === process.env.ADMIN_PASSWORD) {
+    // Check if username and password match environment variables
+    if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
       return NextResponse.json({ success: true })
     } else {
       return NextResponse.json(
-        { error: 'Invalid password' },
+        { error: 'Invalid username or password' },
         { status: 401 }
       )
     }

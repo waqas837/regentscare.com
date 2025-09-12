@@ -14,6 +14,7 @@ import {
 
 export default function AdminLayout({ children, currentPage = 'seats' }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -25,13 +26,13 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
       const response = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ username, password })
       })
       
       if (response.ok) {
         setIsAuthenticated(true)
       } else {
-        alert('Invalid password')
+        alert('Invalid username or password')
       }
     } catch (error) {
       alert('Login failed')
@@ -42,6 +43,7 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
 
   const handleLogout = () => {
     setIsAuthenticated(false)
+    setUsername('')
     setPassword('')
   }
 
@@ -90,10 +92,24 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
           <div className="text-center mb-8">
             <img src="/logo.png" alt="Regents Care" className="h-16 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
-            <p className="text-gray-600 mt-2">Enter password to access admin panel</p>
+            <p className="text-gray-600 mt-2">Enter username and password to access admin panel</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter admin username"
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
