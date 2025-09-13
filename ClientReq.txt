@@ -1,0 +1,32 @@
+
+
+1) Demo page
+- Header above form: “Request appointment — Prof Demo Consultant (ENT · The London Clinic)”
+- Success message after submit: “Thanks — we’ll contact you within 2 hours. A confirmation has been emailed (you’re CC’d).”
+
+2) Simple admin to add a seat
+- Add passworded page: /admin/seats  (env: ADMIN_PASSWORD)
+- Fields: Consultant Name (auto-slug), Booking email, Specialty, Hospitals
+- Buttons: [Save] → writes to DB and makes /c/<slug> live; [Save & Test] → also sends a test referral (PDF attached) to the booking email and CCs info@regentscare.com.
+- List existing seats with Edit/Disable.
+
+3) Patient form — insurer with Self-pay
+
+
+4) Payments (minimum viable)
+- Create Stripe Product “RegentsCare Seat” @ **£149/month**.
+- Generate a **Stripe Checkout Link** and add a button “Start paid plan (£149/m)” on /seats (or /admin/seats).
+- Add /billing/success and /billing/cancel simple pages. (Webhooks can be added later.)
+
+5) Small cleanups
+- /seats page: show “Book a 5-min install: info@regentscare.com” (or redirect to mailto).
+- Privacy copy: “GDPR-compliant. Email via Postmark (DKIM/SPF/DMARC). Data sent securely; removal on request.”
+- Always **BCC info@regentscare.com** on referral emails.
+
+Env vars: ADMIN_PASSWORD, POSTMARK_SERVER_TOKEN (already), STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY.
+
+Acceptance:
+- I can add a consultant on /admin/seats and get a live /c/<slug>.
+- “Save & Test” sends a referral email with PDF to the booking inbox (and BCCs info@).
+- Insurer dropdown works; Self-pay hides policy and appears in subject/PDF.
+- Stripe Checkout opens from the button and returns to /billing/success

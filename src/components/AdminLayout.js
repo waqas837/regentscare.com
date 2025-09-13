@@ -64,6 +64,34 @@ export default function AdminLayout({ children, currentPage = 'seats' }) {
       icon: Users,
       href: '/admin/seats',
       description: 'Manage consultant seats'
+    },
+    {
+      id: 'analytics',
+      name: 'Analytics',
+      icon: BarChart3,
+      href: '/admin/analytics',
+      description: 'View booking statistics'
+    },
+    {
+      id: 'emails',
+      name: 'Email Logs',
+      icon: Mail,
+      href: '/admin/emails',
+      description: 'Track sent emails'
+    },
+    {
+      id: 'billing',
+      name: 'Billing',
+      icon: CreditCard,
+      href: '/admin/billing',
+      description: 'Manage Stripe subscriptions'
+    },
+    {
+      id: 'settings',
+      name: 'Settings',
+      icon: Settings,
+      href: '/admin/settings',
+      description: 'System configuration'
     }
   ]
 
